@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+
+{% block title %}Dodaj utwór literacki{% endblock %}
+{% block title2 %}Dodaj utwór literacki{% endblock %}
+
+{% block content %}
+
+                       {% if errors %}
+    <div class="alert alert-danger">
+  <strong>Błąd!</strong> {{ errors|linebreaks }}
+
+</div>   {% endif %}
+<form action="{% url 'addLiteraryWork' %}" method="post" role="form">
+              {% csrf_token %}
+
+               <div class="form-group">
+
+
+
+            <input class="form-control" type="text" name="title" id="title" value="{% if literaryWork %}{{ literaryWork.title }}{% endif %}" />
+
+            <label for="login">Tytuł</label>
+               </div>
+
+
+    <div class="form-group">
+            <select class="form-control" name="category" id="category">
+
+                {% for cat in categories %}
+                    <option {% if literaryWork.category and cat == literaryWork.category %} selected="selected" {% endif %} value="{{ cat.name }}">{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="login">Kategoria</label>
+    </div>
+
+
+
+                        <div class="form-group">
+<textarea class="form-control" rows="15" name="content" id="content">{% if literaryWork %}{{ literaryWork.content }}{% endif %}</textarea>
+            <label for="content">Treść</label>
+                        </div>
+    <button type="submit" class="btn btn-default  btn-lg">Dodaj!</button><br /><br />
+</form>
+
+
+{% endblock %}

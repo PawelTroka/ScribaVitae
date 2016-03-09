@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+
+{% block title %}Spis kategorii{% endblock %}
+{% block title2 %}Spis kategorii{% endblock %}
+
+{% block content %}
+
+
+    <div class="list-group">
+
+        {% for category in categories.all %}
+    <p><a class="list-group-item" href="{% url 'showCategory' category.id %}">{{ category.name }} <span class="badge">{{ category.literarywork_set.count }}</span></a></p>
+    <p> </p>
+{% endfor %}
+
+</div>
+
+{% endblock %}

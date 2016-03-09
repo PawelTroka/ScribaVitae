@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block title %}Kategoria {{ category.name }}{% endblock %}
+{% block title2 %}Kategoria {{ category.name }}{% endblock %}
+
+{% block content %}
+{% for literaryWork in literaryWorks.all %}
+    <h2> <a href="{% url 'showLiteraryWork' literaryWork.id %}">{{ literaryWork.title }}</a></h2>
+    <p>Autor: {{ literaryWork.author.username }}, Kategoria: <a href="{% url 'showCategory' literaryWork.category.id %}">{{ literaryWork.category }}</a>{% if user.id == literaryWork.author_id or user.is_staff %}, <a href="{% url 'removeLiteraryWork' literaryWork.id %}">usuń utwór</a>{% endif %}</p>
+
+    <hr />
+    <p>{{    literaryWork.content|linebreaks|slice:":300" }}...</p>
+{% endfor %}
+{% endblock %}

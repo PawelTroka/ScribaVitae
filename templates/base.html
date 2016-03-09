@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block title %}{% endblock %}</title>
+
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+<div class="container">
+
+    <div class="row">
+     <div class="jumbotron">
+    <h1><a href="{% url 'index' %}">ScribaVitae.pl</a></h1>
+    <h2>{% block title2 %}{% endblock %}</h2>
+    </div>
+
+
+
+        <div class="col-md-3">
+
+
+
+
+
+                <div class="panel panel-primary">
+  <div class="panel-heading"><h3 class="panel-title">Menu główne</h3></div>
+  <div class="panel-body">
+
+
+              <div class="list-group">
+      <a class="list-group-item{% if request.resolver_match.url_name == "index" %} active{% endif %}" href="{% url 'index' %}">Strona główna</a>
+
+      <a class="list-group-item{% if request.resolver_match.url_name == "listCategories" %} active{% endif %}" href="{% url 'listCategories' %}">Wszystkie kategorie</a>
+
+
+              {% url 'showCategory' 1 as the_url %}
+
+<a class="list-group-item{% if request.get_full_path == the_url  %} active{% endif %}" href="{% url 'showCategory' 1  %}">Opowiadania</a>
+
+              {% url 'showCategory' 2 as the_url %}
+      <a class="list-group-item{% if request.get_full_path == the_url %} active{% endif %}" href="{% url 'showCategory' 2  %}">Wiersze</a>
+
+              {% url 'showCategory' 3 as the_url %}
+      <a class="list-group-item{% if request.get_full_path == the_url %} active{% endif %}" href="{% url 'showCategory' 3  %}">Baśnie</a>
+
+              {% url 'showCategory' 4 as the_url %}
+
+         <a class="list-group-item{% if request.get_full_path == the_url %} active{% endif %}" href="{% url 'showCategory' 4  %}">Powieści</a>
+
+                            {% url 'showCategory' 5 as the_url %}
+         <a class="list-group-item{% if request.get_full_path == the_url %} active{% endif %}" href="{% url 'showCategory' 5  %}">Recenzje</a>
+
+              {% url 'showCategory' 6 as the_url %}
+         <a class="list-group-item{% if request.get_full_path == the_url %} active{% endif %}" href="{% url 'showCategory' 6  %}">Poematy</a>
+
+                            {% url 'showCategory' 7 as the_url %}
+         <a class="list-group-item{% if request.get_full_path == the_url %} active{% endif %}" href="{% url 'showCategory' 7  %}">Nowele</a><br />
+
+</div>
+
+
+
+  </div>
+</div>
+
+
+        <div class="panel panel-primary">
+  <div class="panel-heading"><h3 class="panel-title">Menu użytkownika</h3></div>
+  <div class="panel-body">
+{% if user.is_authenticated %}
+          <p>Witaj {{ user.username }}!</p>
+    <a class="btn btn-default btn-md{% if request.resolver_match.url_name == "addLiteraryWork" %} active{% endif %}" href="{% url 'addLiteraryWork' %}">Dodaj utwór</a><br /><br />
+    <a class="btn btn-default btn-md{% if request.resolver_match.url_name == "listMyLiteraryWorks" %} active{% endif %}" href="{% url 'listMyLiteraryWorks' %}">Moje utwory</a><br /><br />
+    <a class="btn btn-default btn-md" href="{% url 'logOut' %}">Wyloguj się</a>
+      {% else %}
+          <form action="{% url 'logIn' %}" method="post" role="form">
+              {% csrf_token %}
+               <div class="form-group">
+            <input class="form-control" type="text" name="login" id="login" value="" />
+            <label for="login">Nazwa użytkownika</label></div>
+
+                    <div class="form-group">
+                          <input class="form-control" type="password" name="password" id="password" value="" />
+            <label for="password">Hasło</label>
+                        </div>
+    <button type="submit" class="btn btn-default  btn-lg">Zaloguj się</button><br /><br />
+    </form>
+          <a class="btn btn-default  btn-lg" href="{% url 'register' %}">Zarejestruj się</a><br />
+      {% endif %}
+  </div>
+</div>
+
+
+        </div>
+        <div class="col-md-9">
+
+                               {% if error %}
+    <div class="alert alert-danger">
+  <strong>Błąd!</strong> {{ error|linebreaks }}
+
+</div>   {% endif %}
+
+        {% block content %}{% endblock %}
+        </div>
+    </div>
+  <div>Copyright © 2016 Paweł Troka</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+
+{% block title %}Utwór literacki {{ literaryWork.title }}{% endblock %}
+{% block title2 %}Utwór literacki {{ literaryWork.title }}{% endblock %}
+
+{% block content %}
+
+    <h2> <a href="{% url 'showLiteraryWork' literaryWork.id %}">{{ literaryWork.title }}</a></h2>
+    <p>Autor: {{ literaryWork.author.username }}, Kategoria: <a href="{% url 'showCategory' literaryWork.category.id %}">{{ literaryWork.category }}</a>{% if user.id == literaryWork.author_id or user.is_staff %}, <a href="{% url 'removeLiteraryWork' literaryWork.id %}">usuń utwór</a>{% endif %}</p>
+    <hr />
+    <p>{{    literaryWork.content|linebreaks }}</p>
+
+
+
+
+    <div class="panel panel-info">
+  <div class="panel-heading">
+    <h2 class="panel-title">Komentarze</h2>
+  </div>
+  <div class="panel-body">
+
+      {% for comment in literaryWork.comment_set.all|dictsort:"dateAdded" %}
+<div class="panel panel-default">
+  <div class="panel-heading">{{ comment.author.username }}, dnia {{ comment.dateAdded }} napisał:</div>
+  <div class="panel-body">
+    {{ comment.content|linebreaks  }}
+  </div>
+{% if user.is_staff or user.id == comment.author.id %}
+    <div class="panel-footer">
+            <a href="{% url 'removeComment' comment.id %}">usuń komentarz</a>
+    </div>
+{% endif %}
+</div>
+
+     {% endfor %}
+
+
+
+  </div>
+</div>
+
+
+
+            <div class="panel panel-success">
+  <div class="panel-heading">Dodaj komentarz</div>
+  <div class="panel-body">
+{% if user.is_authenticated %}
+<form action="{% url 'addComment' literaryWork.id %}" method="post" role="form">
+              {% csrf_token %}
+               <div class="form-group">
+                   <label for="comment">Treść komentarza:</label>
+<textarea class="form-control" rows="5" name="comment" id="comment"></textarea>
+</div>
+    <button type="submit" class="btn btn-default">Dodaj komentarz</button>
+    </form>
+      {% else %}
+    <p>Komentarze mogą dodawać jedynie zalogowani użytkownicy</p>
+      {% endif %}
+  </div>
+</div>
+
+{% endblock %}
